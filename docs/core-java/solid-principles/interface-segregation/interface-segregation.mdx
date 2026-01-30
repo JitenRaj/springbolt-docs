@@ -1,0 +1,138 @@
+---
+title: Interface Segregation
+parent: SOLID Principles
+---
+
+### Overview
+
+The **Interface Segregation Principle (ISP)** states that **"Clients should not be forced to depend on interfaces they do not use."**
+
+In simpler terms: It is better to have many small, specific interfaces than one large, general-purpose interface.
+
+If a class implements an interface, it should not be forced to provide empty implementations for methods that are irrelevant to its purpose.
+
+### The Problem
+
+This issue is often called the **"Fat Interface"** problem. This happens when you create a single interface that contains methods for many different responsibilities.
+
+**Violation Example:**
+Imagine an interface for a **Multi-Function Printer**.
+
+```java SmartDevice.java icon="java"
+public interface SmartDevice {
+    void print();
+    void fax();
+    void scan();
+}
+```
+
+Now, consider a **Basic Printer** that can only print. To implement this interface, it is forced to handle `fax()` and `scan()` even though it can't do them.
+
+```java BasicPrinter.java icon="java"
+public class BasicPrinter implements SmartDevice {
+    public void print() {
+        System.out.println("Printing...");
+    }
+
+    public void fax() {
+        // Violation: BasicPrinter shouldn't know about faxing!
+        throw new UnsupportedOperationException("I cannot fax!");
+    }
+
+    public void scan() {
+        // Violation: Empty method or Exception
+        throw new UnsupportedOperationException("I cannot scan!");
+    }
+}
+```
+
+### Why is this Bad?
+
+1. **Pollution:** The `BasicPrinter` class is polluted with methods it doesn't need.
+2. **Fragility:** If you change the `fax()` method signature in the interface, you have to modify the `BasicPrinter` class, even though it doesn't use faxing! This violates the Single Responsibility Principle.
+3. **Confusion:** A client using `BasicPrinter` sees `scan()` in the autocomplete list and might try to call it, leading to runtime errors.
+
+### The Solution
+
+The solution is to split the "Fat Interface" into smaller, more specific interfaces.
+
+**Refactored Code:**
+
+1. **Segregate the Interfaces:**
+
+```java Printer.java icon="java"
+public interface Printer {
+    void print();
+}
+```
+
+```java Scanner.java icon="java"
+public interface Scanner {
+    void scan();
+}
+```
+
+```java Fax.java icon="java"
+public interface Fax {
+    void fax();
+}
+```
+
+
+2. **Implement Only What You Need:**
+Now, the `BasicPrinter` implements only `Printer`.
+
+```java BasicPrinter.java icon="java"
+public class BasicPrinter implements Printer {
+    public void print() {
+        System.out.println("Printing...");
+    }
+}
+```
+
+
+3. **Combine for Advanced Devices:**
+A sophisticated machine can implement multiple interfaces.
+
+```java SuperCopier.java icon="java"
+public class SuperCopier implements Printer, Scanner, Fax {
+    public void print() { ... }
+    public void scan() { ... }
+    public void fax() { ... }
+}
+```
+
+
+### Real-World Analogy
+
+Think of a **USB Port vs. Old Proprietary Ports**:
+
+* **Bad (Fat Interface):** Imagine a wall socket that had built-in slots for HDMI, VGA, USB, Audio, and Ethernet all in one giant block. If you only wanted to charge your phone, you'd have to install this massive panel.
+* **Good (ISP):** You have separate ports. You plug your phone into a USB charger. You plug your monitor into HDMI. You don't carry around an HDMI adapter just to charge your phone.
+
+### When to Apply
+
+* **Unused Methods:** If you see classes with methods that return `null`, do nothing, or throw `UnsupportedOperationException`.
+* **Large Interfaces:** If you have an interface with 20+ methods, it likely violates ISP.
+* **Different Clients:** If one part of your app uses only the first 3 methods of an interface, and another part uses only the last 3.
+
+### Key Characteristics
+
+* **Role Interfaces:** Interfaces should be defined by the *role* the client plays, not by the object itself.
+* **Decoupling:** Changes to "unrelated" methods don't force recompilation of clients that don't use them.
+
+### Pros & Cons
+
+| Pros | Cons |
+| --- | --- |
+| **Clean Code:** Classes are cleaner and only contain relevant code. | **Interface Explosion:** You end up with many small interfaces (e.g., `Readable`, `Writable`, `Executable`). |
+| **Flexibility:** You can combine interfaces in different ways to create new behaviors. | **Complexity:** Developers need to know which combination of interfaces to use. |
+| **Safety:** Prevents clients from calling methods that aren't actually supported. |  |
+
+### Why It Matters
+
+ISP reduces the side effects of changes. In large systems, you want to minimize the "blast radius" of a code change. By segregating interfaces, you ensure that modifying the `Scanner` logic never accidentally breaks the `Printer` logic.
+
+### Conclusion
+
+The Interface Segregation Principle encourages you to respect the client. Don't force a client to depend on things it doesn't need. Keep your interfaces small, focused, and cohesive.

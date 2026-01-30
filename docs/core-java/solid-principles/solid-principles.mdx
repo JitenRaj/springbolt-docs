@@ -1,0 +1,37 @@
+---
+title: SOLID Principles
+description: "A set of five design principles intended to make software designs more understandable, flexible, and maintainable."
+---
+
+### Overview
+
+The **SOLID** principles are a collection of five design guidelines popularized by Robert C. Martin (Uncle Bob). They serve as the "gold standard" for Object-Oriented Design, helping developers move away from "rotting code" (fragile, rigid, and immobile) toward a codebase that is easy to refactor and scale.
+
+While OOP provides the tools (Classes, Inheritance, etc.), SOLID provides the **rules** on how to use those tools effectively to prevent technical debt.
+
+### The Five Principles
+
+| Principle | Full Name | Core Concept | Key Benefit |
+| --- | --- | --- | --- |
+| **S** | [Single Responsibility](./single-responsibility/single-responsibility) | A class should have only one reason to change. | High cohesion; easier testing and debugging. |
+| **O** | [Open/Closed](./open-closed-principle/open-closed-principle) | Software entities should be open for extension, but closed for modification. | Prevents breaking existing code when adding new features. |
+| **L** | [Liskov Substitution](./liskov-substitution/liskov-substitution) | Subtypes must be substitutable for their base types. | Ensures inheritance doesn't break logic or introduce unexpected behavior. |
+| **I** | [Interface Segregation](./interface-segregation//interface-segregation) | Clients should not be forced to depend on methods they do not use. | Reduces "fat" interfaces and unnecessary dependencies. |
+| **D** | [Dependency Inversion](./dependency-inversion/dependency-inversion) | Depend on abstractions, not concretions. | Decouples high-level logic from low-level implementation details. |
+
+### Advantages of SOLID
+
+* **Reduced Fragility**: Changes in one part of the system are less likely to break unrelated parts.
+* **Improved Readability**: Classes are smaller, more focused, and their purpose is immediately clear.
+* **Easier Testing**: Since components are decoupled, you can easily "mock" dependencies (like a database) during unit testing.
+* **Enhanced Reusability**: Modular, interface-based code can be easily moved between projects.
+
+### When to Apply SOLID
+
+* **During Refactoring**: Don't over-engineer from day one. Apply SOLID when you notice your code becoming "smelly" (hard to change or understand).
+* **In Large Teams**: These rules ensure that different developers can work on different modules with a shared expectation of how they will connect.
+* **In Framework Development**: If you are building a library for others to use, SOLID is essential for making it extensible.
+
+### Conclusion
+
+The SOLID principles transform "spaghetti code" into a clean, modular architecture. While they may require more initial planning and more files/classes, the long-term payoff in maintenance and scalability is immense.

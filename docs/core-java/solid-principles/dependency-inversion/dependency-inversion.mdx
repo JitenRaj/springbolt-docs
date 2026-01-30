@@ -1,0 +1,157 @@
+---
+title: Dependency Inversion
+parent: SOLID Principles
+---
+
+### Overview
+
+The **Dependency Inversion Principle (DIP)** states two things:
+1.  **High-level modules should not depend on low-level modules. Both should depend on abstractions.**
+2.  **Abstractions should not depend on details. Details should depend on abstractions.**
+
+_In simpler terms:_ Don't hard-code dependencies (like creating new objects with `new`) inside your classes. Instead, ask for them (usually via a constructor).
+
+### The Problem
+
+Traditional programming often creates a hierarchy where high-level policy (Business Logic) depends directly on low-level implementation (Database, API, IO).
+
+**Violation Example:**
+Imagine a `LightSwitch` class that directly controls a `LightBulb`.
+
+```java LightBulb.java icon="java"
+public class LightBulb {
+    public void turnOn() {
+        System.out.println("LightBulb: Bulb turned on...");
+    }
+    public void turnOff() {
+        System.out.println("LightBulb: Bulb turned off...");
+    }
+}
+```
+
+```java ElectricPowerSwitch.java icon="java"
+public class ElectricPowerSwitch {
+    // Violation: Directly depending on the concrete LightBulb class
+    public LightBulb lightBulb;
+    public boolean on;
+
+    public ElectricPowerSwitch(LightBulb lightBulb) {
+        this.lightBulb = lightBulb;
+        this.on = false;
+    }
+
+    public boolean isOn() { return this.on; }
+
+    public void press() {
+        boolean checkOn = isOn();
+        if (checkOn) {
+            lightBulb.turnOff();
+            this.on = false;
+        } else {
+            lightBulb.turnOn();
+            this.on = true;
+        }
+    }
+}
+```
+
+### Why is this Bad?
+
+1. **Rigidity:** If you want to use this switch to turn on a **Fan** instead of a LightBulb, you can't. You have to modify the `ElectricPowerSwitch` class.
+2. **Testing Difficulty:** To test the Switch, you need a real `LightBulb`. You cannot easily mock the bulb to test the switch logic in isolation.
+3. **Tight Coupling:** Changes to `LightBulb` (e.g., changing method names) will break `ElectricPowerSwitch`.
+
+### The Solution
+
+The solution is to invert the dependency. Both the Switch and the Bulb should depend on a common interface (Abstraction).
+
+**Refactored Code:**
+
+1. **Create the Abstraction (Interface):**
+```java Switchable.java icon="java"
+public interface Switchable {
+    void turnOn();
+    void turnOff();
+}
+```
+
+
+2. **Implement the Details:**
+Both `LightBulb` and `Fan` implement `Switchable`.
+```java LightBulb.java icon="java"
+public class LightBulb implements Switchable {
+    public void turnOn() { System.out.println("LightBulb: Bulb on..."); }
+    public void turnOff() { System.out.println("LightBulb: Bulb off..."); }
+}
+```
+
+```java Fan.java icon="java"
+public class Fan implements Switchable {
+    public void turnOn() { System.out.println("Fan: Spinning..."); }
+    public void turnOff() { System.out.println("Fan: Stopping..."); }
+}
+```
+
+
+3. **High-Level Module (Depends on Abstraction):**
+Now, the switch doesn't care what it is turning on.
+```java ElectricPowerSwitch.java icon="java"
+public class ElectricPowerSwitch {
+    private Switchable client;
+    private boolean on;
+
+    public ElectricPowerSwitch(Switchable client) {
+        this.client = client;
+        this.on = false;
+    }
+
+    public void press() {
+        boolean checkOn = isOn();
+        if (checkOn) {
+            client.turnOff();
+            this.on = false;
+        } else {
+            client.turnOn();
+            this.on = true;
+        }
+    }
+}
+```
+
+
+### Real-World Analogy
+
+Think of a **Wall Socket (Interface)**:
+
+* Your **Laptop (High-level module)** needs electricity.
+* The **Nuclear Power Plant (Low-level module)** provides electricity.
+* Your laptop does not wire directly into the Nuclear Plant. That would be messy (and dangerous).
+* Instead, both depend on a standard **Wall Socket**.
+* Because of this inversion, you can plug your laptop into the grid, a generator, or a solar battery without changing the laptop.
+
+### When to Apply
+
+* **Frameworks:** Almost all modern frameworks (Spring, Angular, React) enforce this principle via Dependency Injection.
+* **Unit Testing:** When you need to mock external services (Database, API calls) to test business logic.
+* **Decoupling Layers:** When your Controller layer needs to talk to your Service layer.
+
+### Key Characteristics
+
+* **Dependency Injection (DI):** The technique used to implement DIP. The dependencies are "injected" (passed in) rather than created internally.
+* **Inversion of Control (IoC):** The flow of control is inverted. The framework calls your code, not the other way around.
+
+### Pros & Cons
+
+| Pros | Cons |
+| --- | --- |
+| **Decoupling:** Modules are independent and easier to maintain. | **Complexity:** Code can become harder to follow because you don't always see *what* implementation is being used (it's hidden behind an interface). |
+| **Testability:** Easy to swap real implementations with mocks. | **Boilerplate:** Requires creating more interfaces. |
+| **Flexibility:** Easy to switch implementations (e.g., MySQL -> PostgreSQL). |  |
+
+### Why It Matters
+
+This is the foundation of **Clean Architecture**. Without DIP, your application is a rigid block of code where changing one line breaks ten others. With DIP, your application is a set of pluggable components.
+
+### Conclusion
+
+Dependency Inversion allows us to build flexible systems where high-level business rules are protected from the volatile details of low-level infrastructure. It turns tight coupling into loose coupling.
