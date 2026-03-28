@@ -23,7 +23,7 @@
         ]
       },
       {
-        "tab" : "Core Java",
+        "tab": "Core Java",
         "groups": [
           {
             "group": "Core Java",
@@ -37,7 +37,7 @@
             "group": "Object Oriented Programming",
             "pages": [
               "docs/core-java/oops-concepts/classes-and-objects/classes-and-objects",
-              "docs/core-java/oops-concepts/enum/enum",    
+              "docs/core-java/oops-concepts/enum/enum",
               "docs/core-java/oops-concepts/encapsulation/encapsulation",
               "docs/core-java/oops-concepts/inheritance/inheritance",
               "docs/core-java/oops-concepts/polymorphism/polymorphism",
@@ -110,6 +110,23 @@
         ]
       },
       {
+        "tab": "Algorithm Patterns",
+        "groups": [
+          {
+            "group": "Linked List Patterns",
+            "pages": [
+              "docs/algorithms-patterns/linked-list-patterns/linked-list-patterns/linked-list-patterns",
+              "docs/algorithms-patterns/linked-list-patterns/dummy-node-technique/dummy-node-technique",
+              "docs/algorithms-patterns/linked-list-patterns/linked-list-reversal/linked-list-reversal",
+              "docs/algorithms-patterns/linked-list-patterns/two-pointer-gap/two-pointer-gap",
+              "docs/algorithms-patterns/linked-list-patterns/merge-pattern/merge-pattern",
+              "docs/algorithms-patterns/linked-list-patterns/cyclic-linked-list/cyclic-linked-list",
+              "docs/algorithms-patterns/linked-list-patterns/split-and-stitch/split-and-stitch"
+            ]
+          }
+        ]
+      },
+      {
         "tab": "J2EE Patterns",
         "groups": [
           {
@@ -177,15 +194,15 @@
   },
   "contextual": {
     "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "mcp",
+      "cursor",
+      "vscode"
+    ]
   },
   "errors": {
     "404": {
@@ -197,15 +214,15 @@
   "footer": {
     "socials": {
       "github": "https://github.com/jitenraj",
-      "x":"https://x.com/jitenrajx",
+      "x": "https://x.com/jitenrajx",
       "website": "https://jitenraj.github.io/"
     }
   },
   "seo": {
     "metatags": {
-      "canonical": "https://springbolt.mintlify.app", 
+      "canonical": "https://springbolt.mintlify.app",
       "og:locale": "en_US",
       "keywords": "java, spring boot, algorithms, design patterns, coding patterns, oops, dsa, backend development"
     }
-}
+  }
 }
